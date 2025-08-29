@@ -1,0 +1,23 @@
+# oxlint configuration
+# https://oxc.rs/docs/guide/usage/linter
+
+# Enable all rules
+all = true
+
+# Exclude patterns
+exclude = [
+  "node_modules",
+  "dist",
+  "build",
+  ".next",
+  "generated"
+]
+
+# TypeScript configuration
+typescript = true
+
+# React configuration
+react = true
+
+# Next.js specific rules
+next = true

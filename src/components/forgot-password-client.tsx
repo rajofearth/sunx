@@ -1,40 +1,40 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader2, ArrowLeft } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
-import Link from "next/link";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner';
+import Link from 'next/link';
 
 export default function ForgotPasswordClient() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
-      toast.error("Please enter your email address");
+      toast.error('Please enter your email address');
       return;
     }
 
     setLoading(true);
-    
+
     try {
       await authClient.requestPasswordReset({
         email,
         redirectTo: `${window.location.origin}/reset-password`,
       });
-      
+
       setSent(true);
-      toast.success("Password reset email sent! Check your inbox.");
+      toast.success('Password reset email sent! Check your inbox.');
     } catch (error) {
-      toast.error("Failed to send password reset email. Please try again.");
+      toast.error('Failed to send password reset email. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -54,12 +54,13 @@ export default function ForgotPasswordClient() {
               We've sent a password reset link to <strong>{email}</strong>
             </p>
             <p className="text-muted-foreground text-sm text-center">
-              Click the link in the email to reset your password. The link will expire in 1 hour.
+              Click the link in the email to reset your password. The link will
+              expire in 1 hour.
             </p>
             <div className="flex flex-col gap-2">
               <Link href="/auth">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full border-border/50 text-foreground hover:bg-muted"
                 >
                   <ArrowLeft size={16} className="mr-2" />
@@ -97,16 +98,13 @@ export default function ForgotPasswordClient() {
                 className="bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-border"
               />
             </div>
-            
+
             <p className="text-muted-foreground text-sm">
-              Enter your email address and we'll send you a link to reset your password.
+              Enter your email address and we'll send you a link to reset your
+              password.
             </p>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <Loader2 size={16} className="animate-spin mr-2" />
               ) : null}
@@ -114,7 +112,7 @@ export default function ForgotPasswordClient() {
             </Button>
 
             <div className="text-center">
-              <Link 
+              <Link
                 href="/auth"
                 className="text-muted-foreground hover:text-foreground text-sm underline"
               >

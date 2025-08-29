@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useTransition } from "react";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
-import { loginEmail } from "@/app/auth/action";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useTransition } from 'react';
+import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { loginEmail } from '@/app/auth/action';
+import { useRouter } from 'next/navigation';
 
 export default function SignIn() {
   const [isPending, startTransition] = useTransition();
@@ -17,12 +17,12 @@ export default function SignIn() {
   const handleSubmit = async (formData: FormData) => {
     startTransition(async () => {
       const result = await loginEmail({}, formData);
-      
+
       if (result?.error) {
         toast.error(result.error);
       } else if (result?.success) {
-        toast.success("Successfully signed in!");
-        router.push("/dashboard");
+        toast.success('Successfully signed in!');
+        router.push('/dashboard');
       }
     });
   };
@@ -67,14 +67,8 @@ export default function SignIn() {
         />
       </div>
 
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={isPending}
-      >
-        {isPending ? (
-          <Loader2 size={16} className="animate-spin mr-2" />
-        ) : null}
+      <Button type="submit" className="w-full" disabled={isPending}>
+        {isPending ? <Loader2 size={16} className="animate-spin mr-2" /> : null}
         Sign In
       </Button>
     </form>

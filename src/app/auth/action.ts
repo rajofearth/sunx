@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { validatedAction } from "@/lib/action-helpers";
-import { auth } from "@/lib/auth";
-import { LoginSchema, SignUpSchema } from "@/lib/types";
+import { validatedAction } from '@/lib/action-helpers';
+import { auth } from '@/lib/auth';
+import { LoginSchema, SignUpSchema } from '@/lib/types';
 
 export const signUpEmail = validatedAction(SignUpSchema, async (data) => {
   const { email, password, firstName, lastName } = data;

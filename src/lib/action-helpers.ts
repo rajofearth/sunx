@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export type ActionState = {
   error?: string;
@@ -15,18 +15,23 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
   schema: S,
   action: ValidatedActionFunction<S, T>
 ) {
-  return async (prevState: ActionState, formData: FormData): Promise<ActionState> => {
+  return async (
+    prevState: ActionState,
+    formData: FormData
+  ): Promise<ActionState> => {
     const result = schema.safeParse(Object.fromEntries(formData));
-    
+
     if (!result.success) {
       return { error: result.error.issues[0].message };
     }
 
     try {
       await action(result.data, formData);
-      return { success: "Success" };
+      return { success: 'Success' };
     } catch (error) {
-      return { error: error instanceof Error ? error.message : "An error occurred" };
+      return {
+        error: error instanceof Error ? error.message : 'An error occurred',
+      };
     }
   };
 }
