@@ -46,6 +46,9 @@ DATABASE_URL="file:./local.db"
 
 # App URL (no trailing slash)
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# Generate by running openssl rand -base64 32 or bun x @better-auth/cli secret
+BETTER_AUTH_SECRET="your-secret-here"
 ```
 
 ### 3. Database Setup
@@ -101,6 +104,38 @@ src/
 │   └── utils.ts                  # Utility functions
 └── generated/
     └── prisma/                   # Generated Prisma client
+```
+
+## 🛠️ Development Tools
+
+This project uses modern development tools for optimal performance and code quality:
+
+### Linting with oxlint
+
+[oxlint](https://oxc.rs/docs/guide/usage/linter) is a fast JavaScript/TypeScript linter written in Rust. It provides:
+
+- **Blazing fast performance** - Up to 50-100x faster than ESLint
+- **Zero configuration** - Works out of the box with sensible defaults
+- **TypeScript support** - Full TypeScript and React support
+- **Next.js integration** - Optimized for Next.js projects
+
+Configuration is in `oxlint.toml`:
+```bash
+bun run lint  # Run oxlint
+```
+
+### Formatting with Biome
+
+[Biome](https://biomejs.dev/guides/getting-started/) is a fast formatter and linter written in Rust. It provides:
+
+- **Fast formatting** - Format your code in milliseconds
+- **Consistent style** - Enforce consistent code style across your project
+- **Import organization** - Automatically organize and sort imports
+- **Zero configuration** - Works with sensible defaults
+
+Configuration is in `biome.json`:
+```bash
+bun run format  # Format code with Biome
 ```
 
 ## 🔧 Configuration
@@ -187,6 +222,7 @@ Set these in your production environment:
 ```env
 DATABASE_URL="your-production-database-url"
 NEXT_PUBLIC_APP_URL="https://your-domain.com"
+BETTER_AUTH_SECRET="your-production-secret"
 ```
 
 ### Database Migration
@@ -231,6 +267,8 @@ This template works with all major deployment platforms:
 bun dev          # Start development server
 bun run build        # Build for production
 bun run start        # Start production server
+bun run lint         # Run oxlint for code linting
+bun run format       # Format code with Biome
 bun run typecheck    # TypeScript type checking
 bun run prisma:generate  # Generate Prisma client
 bun run db:push      # Push schema to database

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader2, ArrowLeft, CheckCircle } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Loader2, ArrowLeft, CheckCircle } from 'lucide-react';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function ResetPasswordClient() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -22,53 +22,57 @@ export default function ResetPasswordClient() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const tokenParam = searchParams.get("token");
-    const errorParam = searchParams.get("error");
-    
-    if (errorParam === "INVALID_TOKEN") {
-      setError("Invalid or expired reset token. Please request a new password reset.");
+    const tokenParam = searchParams.get('token');
+    const errorParam = searchParams.get('error');
+
+    if (errorParam === 'INVALID_TOKEN') {
+      setError(
+        'Invalid or expired reset token. Please request a new password reset.'
+      );
     } else if (tokenParam) {
       setToken(tokenParam);
     } else {
-      setError("No reset token found. Please request a new password reset.");
+      setError('No reset token found. Please request a new password reset.');
     }
   }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!token) {
-      toast.error("No reset token found");
+      toast.error('No reset token found');
       return;
     }
 
     if (!password || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      toast.error('Please fill in all fields');
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error('Passwords do not match');
       return;
     }
 
     if (password.length < 8) {
-      toast.error("Password must be at least 8 characters long");
+      toast.error('Password must be at least 8 characters long');
       return;
     }
 
     setLoading(true);
-    
+
     try {
       await authClient.resetPassword({
         newPassword: password,
         token,
       });
-      
+
       setSuccess(true);
-      toast.success("Password reset successfully!");
+      toast.success('Password reset successfully!');
     } catch (error: any) {
-      toast.error(error.message || "Failed to reset password. Please try again.");
+      toast.error(
+        error.message || 'Failed to reset password. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -84,20 +88,14 @@ export default function ResetPasswordClient() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-foreground/80 text-center">
-              {error}
-            </p>
+            <p className="text-foreground/80 text-center">{error}</p>
             <div className="flex flex-col gap-2">
               <Link href="/forgot-password">
-                <Button 
-                  className="w-full"
-                >
-                  Request New Reset
-                </Button>
+                <Button className="w-full">Request New Reset</Button>
               </Link>
               <Link href="/auth">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full border-border/50 text-foreground hover:bg-muted"
                 >
                   <ArrowLeft size={16} className="mr-2" />
@@ -129,11 +127,7 @@ export default function ResetPasswordClient() {
               You can now sign in with your new password.
             </p>
             <Link href="/auth">
-              <Button 
-                className="w-full"
-              >
-                Sign In
-              </Button>
+              <Button className="w-full">Sign In</Button>
             </Link>
           </CardContent>
         </Card>
@@ -165,7 +159,7 @@ export default function ResetPasswordClient() {
                 className="bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-border"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="confirmPassword" className="text-foreground">
                 Confirm New Password
@@ -180,16 +174,12 @@ export default function ResetPasswordClient() {
                 className="bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-border"
               />
             </div>
-            
+
             <p className="text-muted-foreground text-sm">
               Your new password must be at least 8 characters long.
             </p>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <Loader2 size={16} className="animate-spin mr-2" />
               ) : null}
@@ -197,7 +187,7 @@ export default function ResetPasswordClient() {
             </Button>
 
             <div className="text-center">
-              <Link 
+              <Link
                 href="/auth"
                 className="text-muted-foreground hover:text-foreground text-sm underline"
               >
