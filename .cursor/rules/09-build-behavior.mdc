@@ -1,0 +1,58 @@
+---
+alwaysApply: true
+---
+## <a id="metadata-viewport"></a>34. generateMetadata and generateViewport
+
+### Test Pattern: Cached Metadata
+
+**Test Source**: `test/e2e/app-dir/use-cache/use-cache.test.ts` (lines 1049-1336)
+
+```typescript
+// Pattern 1: Shared cache between page and metadata
+
+// lib/data.ts
+async function getCachedData() {
+  'use cache'
+  return Math.random()
+}
+
+// page.tsx
+import { getCachedData } from './lib/data'
+
+export async function generateMetadata() {
+  const data = await getCachedData()
+  return {
+    title: String(data),
+  }
+}
+
+export default async function Page() {
+  const data = await getCachedData()
+  return <div id="page-data">{data}</div>
+}
+
+// TEST BEHAVIOR:
+// - document.title === page-data value
+// - Both use SAME cached value (cache is shared!)
+
+// Pattern 2: Cached generateMetadata with params
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ color: string }>
+}) {
+  'use cache'
+  const { color } = await params
+  return {
+    title: color,
+  }
+}
+
+// TEST BEHAVIOR:
+// - With JS disabled: <title> in <head> ✅
+// - With JS enabled: document.title matches cached value ✅
+// - Refresh: Same title (cached via RDC)
+```
+
+---

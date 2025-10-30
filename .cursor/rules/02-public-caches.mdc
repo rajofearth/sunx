@@ -1,0 +1,48 @@
+---
+alwaysApply: true
+---
+## <a id="non-serializable"></a>6. Non-Serializable Props Pattern
+
+### Test Pattern: Children Props
+
+**Test Source**: `test/e2e/app-dir/use-cache/app/(dynamic)/page.tsx`
+
+```typescript
+// THE PATTERN TESTS PROVE:
+
+async function getCachedRandom(x: number, children: React.ReactNode) {
+  'use cache'
+  return {
+    x,
+    y: Math.random(),
+    r: children,  // Non-serializable
+  }
+}
+
+// When called with:
+getCachedRandom(
+  1,
+  <p>rnd{Math.random()}</p>  // Different every time
+)
+
+// Behavior:
+// - Cache hits on x=1 even though children is different
+// - children re-renders with new random value
+// - y stays cached (same random value)
+```
+
+### Critical Rule from Tests:
+
+**Serializable props** (numbers, strings, plain objects):
+
+- Become part of cache key
+- Must match for cache hit
+
+**Non-serializable props** (JSX, functions, class instances):
+
+- Do NOT become part of cache key
+- Passed through as references
+- Re-evaluated on each render
+- Can change without cache miss
+
+---

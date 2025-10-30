@@ -1,0 +1,128 @@
+---
+alwaysApply: true
+---
+You are an expert in TypeScript, Node.js, Next.js 16, React 19, Shadcn UI, Radix UI, and Tailwind CSS.
+
+## Project Context
+- Next.js 16.0.0 with React 19.2.0
+- TypeScript with strict mode enabled
+- Tailwind CSS v4 with CSS variables
+- Shadcn UI components with Radix UI primitives
+- Biome for linting and formatting
+- Bun as package manager
+
+## Code Style and Structure
+
+### TypeScript
+- Write strict TypeScript code with accurate type definitions
+- Use explicit return types for functions and components
+- Prefer interfaces over types for object shapes
+- Use Zod for schema validation and runtime type checking
+- Always fix linter errors and warnings, never suppress them
+- Use proper generic constraints and utility types
+
+### Next.js 16 Specific Features
+- **Cache Components**: Use the `"use cache"` directive for explicit caching of pages, components, and functions
+- **Async Components**: Leverage async server components for data fetching
+- **Proxy.ts**: Use `proxy.ts` instead of `middleware.ts` for network boundary management
+- **App Router**: Follow App Router conventions with proper file-based routing
+- **Server Actions**: Implement server actions for form handling and mutations
+- **Streaming**: Use Suspense boundaries for progressive loading
+
+### React 19 Features
+- Utilize React 19's View Transitions API for smooth page transitions
+- Use `useEffectEvent()` for event handlers in effects
+- Leverage improved hydration and server-side rendering
+- Implement proper error boundaries with error.tsx files
+
+### Component Architecture
+- Keep components small and focused on single responsibility
+- Extract reusable logic into custom hooks
+- Use compound components pattern for complex UI elements
+- Implement proper prop interfaces with JSDoc comments
+- Prefer composition over inheritance
+
+### File Organization
+- Follow the established project structure:
+  - `src/app/` for App Router pages and layouts
+  - `src/components/` for reusable components
+  - `src/components/ui/` for Shadcn UI components
+  - `src/lib/` for utilities and configurations
+- Use barrel exports (index.ts) for clean imports
+- Group related files in feature-based folders
+- Keep files under 200 lines, split into sub-components when needed
+
+### Styling Guidelines
+- Use Tailwind CSS classes instead of hardcoded styles
+- Centralize color definitions in globals.css using CSS variables
+- Follow the established design system from Shadcn UI
+- Use Tailwind's responsive and state variants
+- Avoid CSS utility classes with !important overrides
+- Implement proper dark mode support using CSS variables
+
+### Data Fetching and State Management
+- Use Server Components for initial data fetching
+- Implement proper loading states with Suspense
+- Use React Query/TanStack Query for client-side data management
+- Implement optimistic updates for better UX
+- Use proper error handling with error boundaries
+
+### Performance Optimization
+- Implement proper code splitting with dynamic imports
+- Use Next.js Image component for optimized images
+- Implement proper caching strategies
+- Use React.memo() and useMemo() judiciously
+- Optimize bundle size with proper tree shaking
+
+### Security Best Practices
+- Validate all inputs with Zod schemas
+- Implement proper CSRF protection
+- Use environment variables for sensitive data
+- Sanitize user inputs and outputs
+- Implement proper authentication and authorization
+
+### Testing
+- Write unit tests for utility functions
+- Implement integration tests for API routes
+- Use proper mocking strategies
+- Test error scenarios and edge cases
+- Maintain good test coverage
+
+### Development Workflow
+- Use Biome for consistent code formatting
+- Follow conventional commit messages
+- Implement proper TypeScript strict mode
+- Use proper ESLint rules and configurations
+- Maintain clean git history
+
+## Code Quality Standards
+- Write self-documenting code with clear variable names
+- Implement proper error handling and logging
+- Use proper TypeScript strict mode features
+- Follow accessibility guidelines (WCAG 2.1)
+- Implement proper SEO optimization
+- Use proper semantic HTML elements
+
+## AI Assistant Guidelines
+- Always provide complete, runnable code examples
+- Include proper TypeScript types and interfaces
+- Explain complex concepts with clear comments
+- Suggest performance optimizations when relevant
+- Provide alternative solutions when appropriate
+- Always test and verify code changes
+- Update related files when making changes
+- Maintain consistency with existing codebase patterns
+
+## Next.js 16 DevTools Integration
+- Leverage Next.js MCP integration for AI-assisted debugging
+- Use runtime diagnostics for performance monitoring
+- Implement proper error tracking and reporting
+- Utilize built-in development tools for optimization
+- Follow Next.js 16 migration guides for upgrades
+
+## Package Management
+- Use Bun for package management and scripts
+- Keep dependencies up to date
+- Use exact versions for critical dependencies
+- Implement proper dependency security scanning
+- Use proper package.json scripts for development workflow

@@ -1,0 +1,78 @@
+---
+alwaysApply: true
+---
+## <a id="generate-static-params"></a>29. generateStaticParams Integration
+
+### Test Pattern: Cardinality-Based Prerendering
+
+**Test Source**: `test/e2e/app-dir/cache-components/app/params/semantics/[lowcard]/[highcard]/layout.tsx`
+
+```typescript
+// Low cardinality param (few values)
+export async function generateStaticParams() {
+  return [{ lowcard: "one" }, { lowcard: "two" }]
+}
+
+// High cardinality param (many values)
+export async function generateStaticParams() {
+  return [
+    { highcard: "build" },
+    // Only one value - others generated on-demand
+  ]
+}
+
+// COMBINED ROUTE: /params/semantics/[lowcard]/[highcard]
+
+// URL: /params/semantics/one/build
+// - lowcard='one' in generateStaticParams ✅
+// - highcard='build' in generateStaticParams ✅
+// Result: FULLY PRERENDERED at build time
+
+// URL: /params/semantics/one/run
+// - lowcard='one' in generateStaticParams ✅
+// - highcard='run' NOT in generateStaticParams ❌
+// Result: PARTIAL PRERENDER
+//   - Layout (lowcard='one'): buildtime shell
+//   - Suspense fallback: SHOWN
+//   - Page (highcard='run'): runtime hole
+
+// URL: /params/semantics/three/run
+// - lowcard='three' NOT in generateStaticParams ❌
+// - highcard='run' NOT in generateStaticParams ❌
+// Result: FULLY DYNAMIC (no shell)
+```
+
+---
+
+## <a id="random-patterns"></a>30. Math.random() and Date.now() Patterns
+
+### Test Pattern: connection() Guards Random Values
+
+**Test Source**: `test/e2e/app-dir/cache-components/app/random/` fixtures
+
+```typescript
+// ❌ WRONG: Random without connection()
+export default async function Page() {
+  const rand = Math.random()  // Causes issues in prerender
+  return <div>{rand}</div>
+}
+
+// Dev warning:
+// "Route used `Math.random()` outside of `'use cache'`
+// and without explicitly calling `await connection()` beforehand."
+
+// ✅ CORRECT: connection() before random
+export default async function Page() {
+  await connection()
+  const rand = Math.random()  // Safe now
+  return <div>{rand}</div>
+}
+
+// ✅ ALSO CORRECT: Random inside 'use cache'
+async function getCachedRandom() {
+  'use cache'
+  return Math.random()  // Cached, same value per cache key
+}
+```
+
+---

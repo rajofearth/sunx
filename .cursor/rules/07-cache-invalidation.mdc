@@ -1,0 +1,41 @@
+---
+alwaysApply: true
+---
+## <a id="refresh-api"></a>24. refresh() - Client Router Cache
+
+### Test Pattern: In-Place Page Update
+
+**Test Source**: `test/e2e/app-dir/use-cache/app/(partially-static)/form/page.tsx`
+
+```typescript
+import { updateTag, cacheTag } from 'next/cache'
+
+async function refresh() {
+  'use server'
+  updateTag('home')
+}
+
+export default async function Page() {
+  'use cache'
+  cacheTag('home')
+
+  return (
+    <form action={refresh}>
+      <button id="refresh">Refresh</button>
+      <p id="t">{new Date().toISOString()}</p>
+    </form>
+  )
+}
+
+// ACTUAL TEST BEHAVIOR:
+// 1. Initial load: timestamp = "2024-01-01T12:00:00.000Z"
+// 2. Click refresh button:
+//    - updateTag('home') called (invalidates cache)
+//    - Page re-renders with new timestamp
+// 3. New timestamp displayed (cache was invalidated)
+//
+// NOTE: This uses updateTag(), not revalidateTag()
+// refresh() here is the server action name, not the next/cache function
+```
+
+---

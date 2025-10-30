@@ -1,0 +1,72 @@
+---
+alwaysApply: true
+---
+## <a id="stale-thresholds"></a>14. Stale Time Thresholds (30s Rule)
+
+### The Magic Numbers from Tests
+
+**Test Source**: `test/e2e/app-dir/segment-cache/prefetch-runtime/prefetch-runtime.test.ts` (lines 831-1030)
+
+```
+RUNTIME_PREFETCH_DYNAMIC_STALE = 30 seconds
+DYNAMIC_EXPIRE = 5 minutes (300 seconds)
+```
+
+### Test Pattern Matrix:
+
+```typescript
+// Pattern 1: Long stale, short expire
+async function Example1() {
+  'use cache'
+  cacheLife({
+    stale: 60,     // >= 30s ✅
+    revalidate: 120,
+    expire: 180    // < 5min
+  })
+  return <div>Content</div>
+}
+
+// Static prefetch: ❌ NO (expire < 5min)
+// Runtime prefetch: ✅ YES (stale >= 30s)
+
+// Pattern 2: Short stale, long expire
+async function Example2() {
+  'use cache'
+  cacheLife({
+    stale: 10,     // < 30s ❌
+    revalidate: 300,
+    expire: 600    // >= 5min
+  })
+  return <div>Content</div>
+}
+
+// Static prefetch: ✅ YES (expire >= 5min)
+// Runtime prefetch: ❌ NO (stale < 30s)
+
+// Pattern 3: Both long
+async function Example3() {
+  'use cache'
+  cacheLife({
+    stale: 60,     // >= 30s ✅
+    revalidate: 300,
+    expire: 600    // >= 5min ✅
+  })
+  return <div>Content</div>
+}
+
+// Static prefetch: ✅ YES
+// Runtime prefetch: ✅ YES
+
+// Pattern 4: cacheLife('seconds') - SPECIAL CASE
+async function Example4() {
+  'use cache'
+  cacheLife('seconds')
+  // Despite name, stale is set to 30s to meet threshold!
+  return <div>Content</div>
+}
+
+// Static prefetch: ❌ NO (expire = 1s < 5min)
+// Runtime prefetch: ✅ YES (stale = 30s exactly)
+```
+
+---

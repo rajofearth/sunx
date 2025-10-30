@@ -1,13 +1,24 @@
+import { Suspense } from "react";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { headers } from "next/headers";
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+async function DashboardContent() {
+  "use cache: private";
+
   const session = await auth.api.getSession({
     headers: await headers()
   });
-  
+
   if (!session) {
     redirect("/auth");
   }
